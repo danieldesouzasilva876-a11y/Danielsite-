@@ -21,6 +21,20 @@ header{
   font-weight:bold;
 }
 
+.slogan{
+  text-align:center;
+  color:#ffd27a;
+  padding:6px;
+}
+
+.aviso{
+  background:#222;
+  text-align:center;
+  padding:10px;
+  color:#ffb84d;
+  font-weight:bold;
+}
+
 .container{padding:20px;}
 
 h2{
@@ -50,7 +64,7 @@ button{
 .qty{
   display:flex;
   align-items:center;
-  gap:8px;
+  gap:6px;
 }
 
 .cart{
@@ -73,23 +87,34 @@ select,input,textarea{
   margin-top:10px;
 }
 
+.toast{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#ff8c00;
+  padding:10px 20px;
+  border-radius:8px;
+  display:none;
+}
 </style>
 </head>
 
 <body>
 
 <header>🍔 Ledilson Lanches</header>
+<div class="slogan">Prazer em lhe servir! LC 22:27</div>
+
+<div class="aviso">⚠ APENAS RETIRADA NO LOCAL</div>
 
 <div class="container">
 
 <h2>Cardápio</h2>
-
 <div id="menu"></div>
 
 <div class="cart">
 <h3>🧾 Carrinho</h3>
 <div id="cart"></div>
-
 <div class="total" id="total">Total: R$ 0.00</div>
 
 <h3>Finalizar Pedido</h3>
@@ -108,135 +133,159 @@ select,input,textarea{
 <button onclick="send()">Enviar no WhatsApp</button>
 
 </div>
-
 </div>
+
+<div class="toast" id="toast">Adicionado ao carrinho</div>
 
 <script>
 
 let pedidoId = Math.floor(Math.random()*9000)+1000;
 
+/* 🔥 CARDÁPIO COMPLETO */
 let produtos = [
-  {name:"Cachorrinho", price:10, type:"food"},
-  {name:"Cachorrão", price:15, type:"food"},
-  {name:"X-Burguer", price:19, type:"food"},
-  {name:"X-Tudo", price:29, type:"food"},
 
-  {name:"Coca-Cola Lata", price:5, type:"drink"},
-  {name:"Guaraná Lata", price:5, type:"drink"},
-  {name:"Fanta Lata", price:5, type:"drink"}
+/* SIMPLES */
+{name:"Misto Quente",price:8,type:"food",desc:"Pão tostado, presunto e queijo"},
+{name:"Misto com Carne",price:12,type:"food",desc:"Carne, presunto e queijo"},
+{name:"Bauru",price:10,type:"food",desc:"Presunto, queijo, tomate, alface, milho e batata"},
+{name:"X-Egg",price:14,type:"food",desc:"Ovo, presunto, queijo e vegetais"},
+{name:"Americano",price:14,type:"food",desc:"Salsicha, presunto, queijo"},
+{name:"X-Salada",price:19,type:"food",desc:"Carne, ovo e vegetais"},
+{name:"X-Calabresa",price:17,type:"food",desc:"Calabresa e ovo"},
+{name:"X-Moda",price:19,type:"food",desc:"Calabresa e salsicha"},
+
+/* PREMIUM */
+{name:"X-Frango",price:22,type:"food",desc:"Frango crocante"},
+{name:"X-Bacon",price:26,type:"food",desc:"Bacon e carne"},
+{name:"X-Tudo",price:29,type:"food",desc:"Tudo incluso"},
+{name:"X-Tudo Turbo",price:39,type:"food",desc:"Duplo tudo + banana"},
+{name:"American Burguer",price:22,type:"food",desc:"Carne e presunto"},
+{name:"X-Burguer",price:19,type:"food",desc:"Carne e queijo"},
+{name:"X-Filé",price:27,type:"food",desc:"Filé bovino"},
+{name:"Calabresa Burguer",price:23,type:"food",desc:"Calabresa e carne"},
+
+/* HOT DOG */
+{name:"Cachorrinho",price:15,type:"food",desc:"Molho especial"},
+{name:"Cachorrão",price:20,type:"food",desc:"2 salsichas"},
+
+/* BEBIDAS */
+{name:"Coca-Cola Lata",price:6,type:"drink",desc:"350ml"},
+{name:"Fanta Lata",price:6,type:"drink",desc:"350ml"},
+{name:"Guaraná Lata",price:6,type:"drink",desc:"350ml"},
+{name:"Refrigerante 2L",price:15,type:"drink",desc:"Vários sabores"},
+{name:"Refrigerante 1L",price:10,type:"drink",desc:"Coca/Guaraná"},
 ];
 
-let cart = [];
+let cart=[];
 
 function renderMenu(){
-  let el = document.getElementById("menu");
-  el.innerHTML = "";
+let el=document.getElementById("menu");
+el.innerHTML="";
 
-  produtos.forEach((p,i)=>{
-    el.innerHTML += `
-      <div class="item">
-        <div>
-          ${p.name} - R$ ${p.price}
-        </div>
+produtos.forEach((p,i)=>{
+el.innerHTML+=`
+<div class="item">
+<div>
+<b>${p.name}</b> - R$ ${p.price}
+<div style="font-size:12px;color:#aaa">${p.desc}</div>
+</div>
 
-        <button onclick="add(${i})">Adicionar</button>
-      </div>
-    `;
-  });
+<button onclick="add(${i})">+</button>
+</div>
+`;
+});
 }
 
 function add(i){
-  let p = produtos[i];
+let p=produtos[i];
 
-  let found = cart.find(c => c.name === p.name);
+let item = cart.find(c=>c.name===p.name);
 
-  if(found){
-    found.qty++;
-  } else {
+if(item){
+item.qty++;
+}else{
 
-    let item = {
-      name:p.name,
-      price:p.price,
-      qty:1,
-      extra:""
-    };
+let extra="";
 
-    // SE FOR BEBIDA → escolher tipo
-    if(p.type === "drink"){
-      let escolha = prompt("Escolha: Coca / Fanta / Guaraná / Pepsi");
-      item.extra = escolha || "";
-    }
-
-    cart.push(item);
-  }
-
-  renderCart();
+if(p.type==="drink"){
+extra=prompt("Escolha: Coca / Fanta / Guaraná / Pepsi")||"";
 }
 
-function minus(index){
-  cart[index].qty--;
-  if(cart[index].qty <= 0){
-    cart.splice(index,1);
-  }
-  renderCart();
+cart.push({name:p.name,price:p.price,qty:1,extra});
 }
 
-function plus(index){
-  cart[index].qty++;
-  renderCart();
+renderCart();
+toast();
+}
+
+function minus(i){
+cart[i].qty--;
+if(cart[i].qty<=0) cart.splice(i,1);
+renderCart();
+}
+
+function plus(i){
+cart[i].qty++;
+renderCart();
 }
 
 function renderCart(){
-  let el = document.getElementById("cart");
-  el.innerHTML = "";
+let el=document.getElementById("cart");
+el.innerHTML="";
 
-  let total = 0;
+let total=0;
 
-  cart.forEach((c,i)=>{
-    total += c.price * c.qty;
+cart.forEach((c,i)=>{
+total+=c.price*c.qty;
 
-    el.innerHTML += `
-      <div class="item">
-        <div>
-          ${c.name} ${c.extra ? "("+c.extra+")" : ""}<br>
-          R$ ${c.price.toFixed(2)} x ${c.qty}
-        </div>
+el.innerHTML+=`
+<div class="item">
+<div>
+${c.name} ${c.extra?`(${c.extra})`:""}<br>
+R$ ${c.price} x ${c.qty}
+</div>
 
-        <div class="qty">
-          <button onclick="minus(${i})">-</button>
-          <button onclick="plus(${i})">+</button>
-        </div>
-      </div>
-    `;
-  });
+<div class="qty">
+<button onclick="minus(${i})">-</button>
+<button onclick="plus(${i})">+</button>
+</div>
+</div>
+`;
+});
 
-  document.getElementById("total").innerText = "Total: R$ " + total.toFixed(2);
+document.getElementById("total").innerText="Total: R$ "+total.toFixed(2);
 }
 
 function send(){
 
-  let nome = document.getElementById("nome").value;
-  let telefone = document.getElementById("telefone").value;
-  let pagamento = document.getElementById("pagamento").value;
-  let obs = document.getElementById("obs").value;
+let nome=document.getElementById("nome").value;
+let telefone=document.getElementById("telefone").value;
+let pagamento=document.getElementById("pagamento").value;
+let obs=document.getElementById("obs").value;
 
-  let msg = `🍔 *NOVO PEDIDO*\n🧾 Pedido Nº: ${pedidoId}\n\n`;
-  msg += `👤 Nome: ${nome}\n📞 Telefone: ${telefone}\n💳 Pagamento: ${pagamento}\n\n`;
-  msg += `📦 *Pedido:*\n`;
+let msg=`🍔 *NOVO PEDIDO*\n🧾 Pedido Nº: ${pedidoId}\n\n`;
+msg+=`👤 Nome: ${nome}\n📞 Telefone: ${telefone}\n💳 Pagamento: ${pagamento}\n\n`;
+msg+=`📦 *Pedido:*\n`;
 
-  let total = 0;
+let total=0;
 
-  cart.forEach(c=>{
-    total += c.price * c.qty;
-    msg += `- ${c.name} ${c.extra ? "(" + c.extra + ")" : ""} - R$ ${(c.price*c.qty).toFixed(2)}\n`;
-  });
+cart.forEach(c=>{
+total+=c.price*c.qty;
+msg+=`- ${c.name} ${c.extra?`(${c.extra})`:""} - R$ ${(c.price*c.qty).toFixed(2)}\n`;
+});
 
-  msg += `\n💰 *Total: R$ ${total.toFixed(2)}*\n`;
-  msg += `\n📝 Obs: ${obs}`;
+msg+=`\n💰 *Total: R$ ${total.toFixed(2)}*\n`;
+msg+=`\n📝 Obs: ${obs}`;
 
-  let url = "https://wa.me/5594992447611?text=" + encodeURIComponent(msg);
+let url="https://wa.me/5594992447611?text="+encodeURIComponent(msg);
 
-  window.open(url, "_blank");
+window.open(url,"_blank");
+}
+
+function toast(){
+let t=document.getElementById("toast");
+t.style.display="block";
+setTimeout(()=>t.style.display="none",1200);
 }
 
 renderMenu();
