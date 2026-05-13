@@ -6,277 +6,241 @@
 <title>Ledilson Lanches</title>
 
 <style>
-  body{
-    margin:0;
-    font-family:Arial;
-    background:#0f0f0f;
-    color:#fff;
-  }
+body{
+  margin:0;
+  font-family:Arial;
+  background:#0f0f0f;
+  color:#fff;
+}
 
-  header{
-    background:#ff8c00;
-    text-align:center;
-    padding:20px;
-    font-size:26px;
-    font-weight:bold;
-  }
+header{
+  background:#ff8c00;
+  text-align:center;
+  padding:20px;
+  font-size:26px;
+  font-weight:bold;
+}
 
-  .slogan{
-    text-align:center;
-    color:#ffd27a;
-    padding:8px;
-  }
+.container{padding:20px;}
 
-  .aviso{
-    background:#222;
-    text-align:center;
-    padding:10px;
-    color:#ffb84d;
-    font-weight:bold;
-  }
+h2{
+  border-left:5px solid #ff8c00;
+  padding-left:10px;
+}
 
-  .container{padding:20px;}
+.item{
+  background:#1c1c1c;
+  padding:12px;
+  margin:10px 0;
+  border-radius:10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
 
-  h2{
-    border-left:5px solid #ff8c00;
-    padding-left:10px;
-    margin-top:25px;
-  }
+button{
+  background:#ff8c00;
+  border:none;
+  padding:6px 10px;
+  color:#fff;
+  border-radius:6px;
+  cursor:pointer;
+}
 
-  .item{
-    background:#1c1c1c;
-    padding:12px;
-    margin:10px 0;
-    border-radius:10px;
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
+.qty{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
 
-    animation: fadeUp 0.4s ease;
-    transition:0.2s;
-  }
+.cart{
+  background:#000;
+  padding:15px;
+  margin-top:20px;
+  border-radius:10px;
+}
 
-  .item:hover{
-    transform:scale(1.02);
-    background:#2a2a2a;
-  }
+select,input,textarea{
+  width:100%;
+  padding:10px;
+  margin:5px 0;
+  border:none;
+  border-radius:6px;
+}
 
-  @keyframes fadeUp{
-    from{opacity:0; transform:translateY(10px);}
-    to{opacity:1; transform:translateY(0);}
-  }
+.total{
+  font-weight:bold;
+  margin-top:10px;
+}
 
-  .info{flex:1;}
-
-  .desc{
-    font-size:12px;
-    color:#aaa;
-    margin-top:3px;
-  }
-
-  button{
-    background:#ff8c00;
-    border:none;
-    padding:8px 10px;
-    color:#fff;
-    border-radius:6px;
-    cursor:pointer;
-    transition:0.2s;
-  }
-
-  button:active{
-    transform:scale(0.95);
-  }
-
-  .cart{
-    background:#000;
-    padding:15px;
-    margin-top:20px;
-    border-radius:10px;
-  }
-
-  .cart-item{
-    display:flex;
-    justify-content:space-between;
-    margin:5px 0;
-    font-size:14px;
-  }
-
-  .remove{
-    background:#444;
-    font-size:12px;
-    padding:4px 8px;
-  }
-
-  input,textarea{
-    width:100%;
-    padding:10px;
-    margin:5px 0;
-    border:none;
-    border-radius:6px;
-  }
-
-  .toast{
-    position:fixed;
-    bottom:20px;
-    left:50%;
-    transform:translateX(-50%);
-    background:#ff8c00;
-    padding:12px 20px;
-    border-radius:10px;
-    display:none;
-    animation: slideUp 0.3s ease;
-  }
-
-  @keyframes slideUp{
-    from{opacity:0; transform:translate(-50%,20px);}
-    to{opacity:1; transform:translate(-50%,0);}
-  }
 </style>
 </head>
 
 <body>
 
-<header>🍔 Ledilson Lanches 🍔</header>
-<div class="slogan">Prazer em lhe servir! Lucas 22:27</div>
-
-<div class="aviso">
-⚠ NÃO FAZEMOS DELIVERY, APENAS RETIRADA NO LOCAL
-</div>
+<header>🍔 Ledilson Lanches</header>
 
 <div class="container">
 
-<!-- SIMPLES -->
-<h2>Lanches Simples</h2>
+<h2>Cardápio</h2>
 
-<div class="item"><div class="info">Misto Quente - R$ 8<div class="desc">Pão tostado, presunto e queijo</div></div><button onclick="add('Misto Quente',8)">Adicionar</button></div>
+<div id="menu"></div>
 
-<div class="item"><div class="info">Misto com Carne - R$ 12<div class="desc">Blend de carne, presunto e queijo</div></div><button onclick="add('Misto com Carne',12)">Adicionar</button></div>
-
-<div class="item"><div class="info">Bauru - R$ 10<div class="desc">Presunto, queijo, tomate, alface, milho e batata palha</div></div><button onclick="add('Bauru',10)">Adicionar</button></div>
-
-<div class="item"><div class="info">X-Egg - R$ 14<div class="desc">Ovo, presunto, queijo, vegetais e batata palha</div></div><button onclick="add('X-Egg',14)">Adicionar</button></div>
-
-<div class="item"><div class="info">Americano - R$ 14<div class="desc">Salsicha, presunto, queijo e vegetais</div></div><button onclick="add('Americano',14)">Adicionar</button></div>
-
-<div class="item"><div class="info">X-Salada - R$ 19<div class="desc">Carne, ovo, presunto, queijo e vegetais</div></div><button onclick="add('X-Salada',19)">Adicionar</button></div>
-
-<div class="item"><div class="info">X-Calabresa - R$ 17<div class="desc">Calabresa, ovo, presunto, queijo</div></div><button onclick="add('X-Calabresa',17)">Adicionar</button></div>
-
-<div class="item"><div class="info">X-Moda - R$ 19<div class="desc">Calabresa, salsicha e vegetais</div></div><button onclick="add('X-Moda',19)">Adicionar</button></div>
-
-<!-- PREMIUM -->
-<h2>Lanches Premium</h2>
-
-<div class="item"><div class="info">X-Frango - R$ 22<div class="desc">Frango crocante, vegetais e batata</div></div><button onclick="add('X-Frango',22)">Adicionar</button></div>
-
-<div class="item"><div class="info">X-Bacon - R$ 26<div class="desc">Bacon, carne e vegetais</div></div><button onclick="add('X-Bacon',26)">Adicionar</button></div>
-
-<div class="item"><div class="info">X-Tudo - R$ 29<div class="desc">Tudo: carne, bacon, ovo, salsicha, calabresa</div></div><button onclick="add('X-Tudo',29)">Adicionar</button></div>
-
-<div class="item"><div class="info">X-Tudo Turbo - R$ 39<div class="desc">Dupla carne, bacon, ovos, banana e mais</div></div><button onclick="add('X-Tudo Turbo',39)">Adicionar</button></div>
-
-<div class="item"><div class="info">American Burguer - R$ 22<div class="desc">Carne, presunto, vegetais</div></div><button onclick="add('American Burguer',22)">Adicionar</button></div>
-
-<div class="item"><div class="info">X-Burguer - R$ 19<div class="desc">Carne, queijo e vegetais</div></div><button onclick="add('X-Burguer',19)">Adicionar</button></div>
-
-<div class="item"><div class="info">X-Filé - R$ 27<div class="desc">Filé bovino, ovo e vegetais</div></div><button onclick="add('X-Filé',27)">Adicionar</button></div>
-
-<div class="item"><div class="info">Calabresa Burguer - R$ 23<div class="desc">Calabresa, carne e queijo</div></div><button onclick="add('Calabresa Burguer',23)">Adicionar</button></div>
-
-<!-- HOT DOG -->
-<h2>Hot Dog's</h2>
-
-<div class="item"><div class="info">Cachorrinho - R$ 15<div class="desc">Molho especial, salsicha, milho e batata palha</div></div><button onclick="add('Cachorrinho',15)">Adicionar</button></div>
-
-<div class="item"><div class="info">Cachorrão - R$ 20<div class="desc">2 salsichas, molho especial e toppings</div></div><button onclick="add('Cachorrão',20)">Adicionar</button></div>
-
-<!-- BEBIDAS -->
-<h2>Bebidas</h2>
-
-<div class="item"><div class="info">Refrigerante 2L - R$ 15<div class="desc">Coca-Cola, Fanta, Guaraná, Pepsi</div></div><button onclick="add('Refrigerante 2L',15)">Adicionar</button></div>
-
-<div class="item"><div class="info">Refrigerante 1L - R$ 10<div class="desc">Coca-Cola, Guaraná</div></div><button onclick="add('Refrigerante 1L',10)">Adicionar</button></div>
-
-<div class="item"><div class="info">Lata 350ml - R$ 6<div class="desc">Coca-Cola, Fanta, Guaraná</div></div><button onclick="add('Lata 350ml',6)">Adicionar</button></div>
-
-<div class="item"><div class="info">Garrafa LS 1L - R$ 15<div class="desc">Coca-Cola, Fanta</div></div><button onclick="add('Garrafa LS 1L',15)">Adicionar</button></div>
-
-<!-- CARRINHO -->
 <div class="cart">
 <h3>🧾 Carrinho</h3>
 <div id="cart"></div>
-</div>
+
+<div class="total" id="total">Total: R$ 0.00</div>
 
 <h3>Finalizar Pedido</h3>
 
-<input id="nome" placeholder="Seu nome">
-<input id="numero" placeholder="WhatsApp">
+<input id="nome" placeholder="Nome">
+<input id="telefone" placeholder="Telefone">
+
+<select id="pagamento">
+  <option>Dinheiro</option>
+  <option>Pix</option>
+  <option>Cartão</option>
+</select>
+
 <textarea id="obs" placeholder="Observações"></textarea>
 
-<button onclick="send()">Finalizar no WhatsApp</button>
+<button onclick="send()">Enviar no WhatsApp</button>
 
 </div>
 
-<div class="toast" id="toast">Produto adicionado no carrinho</div>
+</div>
 
 <script>
-let cart=[];
 
-function add(name,price){
-  cart.push({name,price});
-  render();
-  showToast();
-}
+let pedidoId = Math.floor(Math.random()*9000)+1000;
 
-function removeItem(i){
-  cart.splice(i,1);
-  render();
-}
+let produtos = [
+  {name:"Cachorrinho", price:10, type:"food"},
+  {name:"Cachorrão", price:15, type:"food"},
+  {name:"X-Burguer", price:19, type:"food"},
+  {name:"X-Tudo", price:29, type:"food"},
 
-function render(){
-  let el=document.getElementById("cart");
-  el.innerHTML="";
-  cart.forEach((i,index)=>{
-    el.innerHTML+=`
-      <div class="cart-item">
-        <span>${i.name} - R$ ${i.price}</span>
-        <button class="remove" onclick="removeItem(${index})">Remover</button>
+  {name:"Coca-Cola Lata", price:5, type:"drink"},
+  {name:"Guaraná Lata", price:5, type:"drink"},
+  {name:"Fanta Lata", price:5, type:"drink"}
+];
+
+let cart = [];
+
+function renderMenu(){
+  let el = document.getElementById("menu");
+  el.innerHTML = "";
+
+  produtos.forEach((p,i)=>{
+    el.innerHTML += `
+      <div class="item">
+        <div>
+          ${p.name} - R$ ${p.price}
+        </div>
+
+        <button onclick="add(${i})">Adicionar</button>
       </div>
     `;
   });
 }
 
-function showToast(){
-  let t=document.getElementById("toast");
-  t.style.display="block";
-  setTimeout(()=>t.style.display="none",1500);
+function add(i){
+  let p = produtos[i];
+
+  let found = cart.find(c => c.name === p.name);
+
+  if(found){
+    found.qty++;
+  } else {
+
+    let item = {
+      name:p.name,
+      price:p.price,
+      qty:1,
+      extra:""
+    };
+
+    // SE FOR BEBIDA → escolher tipo
+    if(p.type === "drink"){
+      let escolha = prompt("Escolha: Coca / Fanta / Guaraná / Pepsi");
+      item.extra = escolha || "";
+    }
+
+    cart.push(item);
+  }
+
+  renderCart();
+}
+
+function minus(index){
+  cart[index].qty--;
+  if(cart[index].qty <= 0){
+    cart.splice(index,1);
+  }
+  renderCart();
+}
+
+function plus(index){
+  cart[index].qty++;
+  renderCart();
+}
+
+function renderCart(){
+  let el = document.getElementById("cart");
+  el.innerHTML = "";
+
+  let total = 0;
+
+  cart.forEach((c,i)=>{
+    total += c.price * c.qty;
+
+    el.innerHTML += `
+      <div class="item">
+        <div>
+          ${c.name} ${c.extra ? "("+c.extra+")" : ""}<br>
+          R$ ${c.price.toFixed(2)} x ${c.qty}
+        </div>
+
+        <div class="qty">
+          <button onclick="minus(${i})">-</button>
+          <button onclick="plus(${i})">+</button>
+        </div>
+      </div>
+    `;
+  });
+
+  document.getElementById("total").innerText = "Total: R$ " + total.toFixed(2);
 }
 
 function send(){
-  let nome=document.getElementById("nome").value;
-  let numero=document.getElementById("numero").value;
-  let obs=document.getElementById("obs").value;
 
-  if(cart.length===0){
-    alert("Carrinho vazio!");
-    return;
-  }
+  let nome = document.getElementById("nome").value;
+  let telefone = document.getElementById("telefone").value;
+  let pagamento = document.getElementById("pagamento").value;
+  let obs = document.getElementById("obs").value;
 
-  let msg="🍔 *LEDILSON LANCHES*%0A%0A";
-  msg+=`👤 Nome: ${nome}%0A`;
-  msg+=`📱 WhatsApp: ${numero}%0A%0A`;
-  msg+="🧾 Pedido:%0A";
+  let msg = `🍔 *NOVO PEDIDO*\n🧾 Pedido Nº: ${pedidoId}\n\n`;
+  msg += `👤 Nome: ${nome}\n📞 Telefone: ${telefone}\n💳 Pagamento: ${pagamento}\n\n`;
+  msg += `📦 *Pedido:*\n`;
 
-  cart.forEach(i=>{
-    msg+=`- ${i.name} (R$ ${i.price})%0A`;
+  let total = 0;
+
+  cart.forEach(c=>{
+    total += c.price * c.qty;
+    msg += `- ${c.name} ${c.extra ? "(" + c.extra + ")" : ""} - R$ ${(c.price*c.qty).toFixed(2)}\n`;
   });
 
-  msg+=`%0A📝 Obs: ${obs}`;
+  msg += `\n💰 *Total: R$ ${total.toFixed(2)}*\n`;
+  msg += `\n📝 Obs: ${obs}`;
 
-  let url="https://wa.me/5594992447611?text="+msg;
-  window.open(url,"_blank");
+  let url = "https://wa.me/5594992447611?text=" + encodeURIComponent(msg);
+
+  window.open(url, "_blank");
 }
+
+renderMenu();
+
 </script>
 
 </body>
