@@ -113,6 +113,24 @@ input,textarea,select{
   font-weight:bold;
   margin-top:10px;
 }
+
+/* 🔔 TOAST */
+.toast{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#ff8c00;
+  padding:10px 18px;
+  border-radius:8px;
+  display:none;
+  animation:up 0.3s ease;
+}
+
+@keyframes up{
+  from{opacity:0; transform:translate(-50%,20px);}
+  to{opacity:1; transform:translate(-50%,0);}
+}
 </style>
 </head>
 
@@ -164,47 +182,50 @@ input,textarea,select{
 
 </div>
 
+<!-- TOAST -->
+<div class="toast" id="toast">Produto adicionado ao carrinho</div>
+
 <script>
 
 let pedidoId = Math.floor(Math.random()*9000)+1000;
 
-/* 🍔 CARDÁPIO COMPLETO COM DESCRIÇÕES ORIGINAIS */
+/* 🍔 CARDÁPIO COMPLETO */
 let data = {
 
 simples:[
-{name:"Misto Quente",price:8,desc:"Pão tostado, presunto e queijo"},
-{name:"Misto com Carne",price:12,desc:"Pão tostado, blend de carne, presunto e queijo"},
-{name:"Bauru",price:10,desc:"Pão tostado, presunto, queijo, tomate, alface, milho e batata palha"},
-{name:"X-Egg",price:14,desc:"Pão tostado, ovo, presunto, queijo, alface, tomate, milho e batata palha"},
-{name:"Americano",price:14,desc:"Pão tostado, presunto, queijo, salsicha, alface, tomate, milho e batata palha"},
-{name:"X-Salada",price:19,desc:"Pão tostado, blend de carne, ovo, presunto, queijo, alface, tomate, milho e batata palha"},
-{name:"X-Calabresa",price:17,desc:"Pão tostado, calabresa, ovo, presunto, queijo, alface, tomate, milho e batata palha"},
-{name:"X-Moda",price:19,desc:"Pão tostado, calabresa, salsicha, presunto, queijo, alface, tomate, milho e batata palha"},
+{name:"X-Salada",price:19,desc:"Carne, ovo e vegetais"},
+{name:"X-Moda",price:19,desc:"Calabresa e salsicha"},
+{name:"X-Egg",price:14,desc:"Ovo, presunto e queijo"},
+{name:"Americano",price:14,desc:"Salsicha e queijo"},
+{name:"Misto com Carne",price:12,desc:"Carne, presunto e queijo"},
+{name:"Bauru",price:10,desc:"Completo tradicional"},
+{name:"Misto Quente",price:8,desc:"Presunto e queijo"},
+{name:"X-Calabresa",price:17,desc:"Calabresa e ovo"}
 ],
 
 premium:[
-{name:"X-Frango",price:22,desc:"Pão tostado, frango crocante, ovo, presunto, queijo, alface, tomate, milho e batata"},
-{name:"X-Bacon",price:26,desc:"Pão tostado, bacon, blend de carne, presunto, queijo, alface, tomate, milho e batata"},
-{name:"X-Tudo",price:29,desc:"Pão tostado, blend de carne, bacon, ovo, salsicha, calabresa, presunto, queijo, alface, tomate, milho e batata"},
-{name:"X-Tudo Turbo",price:39,desc:"Pão tostado, 2 blends de carne, bacon, 2 ovos, salsicha, calabresa, banana, 2 presuntos, 2 queijos, alface, tomate, milho e batata"},
-{name:"American Burguer",price:22,desc:"Pão tostado, blend de carne, presunto, salsicha, queijo, alface, tomate, milho e batata"},
-{name:"X-Burguer",price:19,desc:"Pão tostado, blend de carne, presunto, queijo, alface, tomate, milho e batata"},
-{name:"X-Filé",price:27,desc:"Pão tostado, filé bovino, ovo, presunto, queijo, alface, tomate, milho e batata"},
-{name:"Calabresa Burguer",price:23,desc:"Pão tostado, blend de carne, calabresa, ovo, presunto, queijo, alface, tomate, milho e batata"},
+{name:"X-Tudo Turbo",price:39,desc:"Duplo + banana"},
+{name:"X-Tudo",price:29,desc:"Tudo incluso"},
+{name:"X-Bacon",price:26,desc:"Bacon e carne"},
+{name:"X-Filé",price:27,desc:"Filé bovino"},
+{name:"American Burguer",price:22,desc:"Carne e presunto"},
+{name:"X-Frango",price:22,desc:"Frango crocante"},
+{name:"Calabresa Burguer",price:23,desc:"Calabresa e carne"},
+{name:"X-Burguer",price:19,desc:"Carne e queijo"}
 ],
 
 hotdog:[
-{name:"Cachorrinho",price:15,desc:"Pão, molho especial, salsicha, uva passa, maionese verde, ketchup, queijo parmesão ralado, milho e batata palha"},
-{name:"Cachorrão",price:20,desc:"Pão, molho especial, 2 salsichas, uva passa, maionese verde, ketchup, queijo parmesão ralado, milho e batata palha"},
+{name:"Cachorrão",price:20,desc:"2 salsichas"},
+{name:"Cachorrinho",price:15,desc:"Molho especial"}
 ],
 
 bebidas:[
-{name:"Coca-Cola Lata",price:6,desc:"Refrigerante 350ml bem gelado"},
-{name:"Fanta Lata",price:6,desc:"Refrigerante 350ml sabor laranja"},
-{name:"Guaraná Antarctica Lata",price:6,desc:"Refrigerante 350ml tradicional"},
-{name:"Pepsi Lata",price:6,desc:"Refrigerante 350ml Pepsi"},
-{name:"Refrigerante 2L",price:15,desc:"Coca-Cola, Fanta, Guaraná ou Pepsi"},
-{name:"Refrigerante 1L",price:10,desc:"Coca-Cola ou Guaraná"},
+{name:"Refrigerante 2L",price:15,desc:"Vários sabores"},
+{name:"Refrigerante 1L",price:10,desc:"Coca / Guaraná"},
+{name:"Coca-Cola Lata",price:6,desc:"350ml"},
+{name:"Fanta Lata",price:6,desc:"350ml"},
+{name:"Guaraná Lata",price:6,desc:"350ml"},
+{name:"Pepsi Lata",price:6,desc:"350ml"}
 ]
 
 };
@@ -258,6 +279,7 @@ cart.push(obj);
 }
 
 renderCart();
+toast();
 }
 
 function minus(i){
@@ -271,7 +293,7 @@ cart[i].qty++;
 renderCart();
 }
 
-/* RENDER CARRINHO */
+/* CARRINHO */
 function renderCart(){
 
 let el=document.getElementById("cart");
@@ -303,7 +325,6 @@ R$ ${c.price} x ${c.qty}
 `;
 });
 
-/* bebida aparece só se tiver bebida */
 let drinkBox=document.getElementById("drinkBox");
 drinkBox.innerHTML="";
 
@@ -320,6 +341,13 @@ drinkBox.innerHTML=`
 }
 
 document.getElementById("total").innerText="Total: R$ "+total.toFixed(2);
+}
+
+/* TOAST */
+function toast(){
+let t=document.getElementById("toast");
+t.style.display="block";
+setTimeout(()=>t.style.display="none",1200);
 }
 
 /* WHATS */
