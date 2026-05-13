@@ -35,11 +35,25 @@ header{
   font-weight:bold;
 }
 
-.container{padding:20px;}
+.container{padding:15px;}
 
-h2{
-  border-left:5px solid #ff8c00;
-  padding-left:10px;
+.tabs{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  margin-bottom:15px;
+}
+
+.tab{
+  background:#1c1c1c;
+  padding:10px;
+  border-radius:8px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+.tab.active{
+  background:#ff8c00;
 }
 
 .item{
@@ -61,10 +75,9 @@ button{
   cursor:pointer;
 }
 
-.qty{
-  display:flex;
-  align-items:center;
-  gap:6px;
+.desc{
+  font-size:12px;
+  color:#aaa;
 }
 
 .cart{
@@ -74,7 +87,25 @@ button{
   border-radius:10px;
 }
 
-select,input,textarea{
+.cart-item{
+  display:flex;
+  justify-content:space-between;
+  margin:8px 0;
+  align-items:center;
+}
+
+.qty button{
+  margin:0 3px;
+  padding:4px 8px;
+  background:#444;
+}
+
+.total{
+  margin-top:10px;
+  font-weight:bold;
+}
+
+input,textarea,select{
   width:100%;
   padding:10px;
   margin:5px 0;
@@ -82,21 +113,6 @@ select,input,textarea{
   border-radius:6px;
 }
 
-.total{
-  font-weight:bold;
-  margin-top:10px;
-}
-
-.toast{
-  position:fixed;
-  bottom:20px;
-  left:50%;
-  transform:translateX(-50%);
-  background:#ff8c00;
-  padding:10px 20px;
-  border-radius:8px;
-  display:none;
-}
 </style>
 </head>
 
@@ -109,12 +125,22 @@ select,input,textarea{
 
 <div class="container">
 
-<h2>Cardápio</h2>
-<div id="menu"></div>
+<!-- ABAS -->
+<div class="tabs">
+  <div class="tab active" onclick="showTab('simples')">Simples</div>
+  <div class="tab" onclick="showTab('premium')">Premium</div>
+  <div class="tab" onclick="showTab('hotdog')">Hot Dog</div>
+  <div class="tab" onclick="showTab('bebidas')">Bebidas</div>
+</div>
 
+<!-- PRODUTOS -->
+<div id="produtos"></div>
+
+<!-- CARRINHO -->
 <div class="cart">
 <h3>🧾 Carrinho</h3>
 <div id="cart"></div>
+
 <div class="total" id="total">Total: R$ 0.00</div>
 
 <h3>Finalizar Pedido</h3>
@@ -123,99 +149,99 @@ select,input,textarea{
 <input id="telefone" placeholder="Telefone">
 
 <select id="pagamento">
-  <option>Dinheiro</option>
-  <option>Pix</option>
-  <option>Cartão</option>
+<option>Dinheiro</option>
+<option>Pix</option>
+<option>Cartão</option>
 </select>
 
 <textarea id="obs" placeholder="Observações"></textarea>
 
 <button onclick="send()">Enviar no WhatsApp</button>
-
-</div>
 </div>
 
-<div class="toast" id="toast">Adicionado ao carrinho</div>
+</div>
 
 <script>
 
 let pedidoId = Math.floor(Math.random()*9000)+1000;
 
-/* 🔥 CARDÁPIO COMPLETO */
-let produtos = [
+/* 🔥 CARDÁPIO */
+let data = {
 
-/* SIMPLES */
-{name:"Misto Quente",price:8,type:"food",desc:"Pão tostado, presunto e queijo"},
-{name:"Misto com Carne",price:12,type:"food",desc:"Carne, presunto e queijo"},
-{name:"Bauru",price:10,type:"food",desc:"Presunto, queijo, tomate, alface, milho e batata"},
-{name:"X-Egg",price:14,type:"food",desc:"Ovo, presunto, queijo e vegetais"},
-{name:"Americano",price:14,type:"food",desc:"Salsicha, presunto, queijo"},
-{name:"X-Salada",price:19,type:"food",desc:"Carne, ovo e vegetais"},
-{name:"X-Calabresa",price:17,type:"food",desc:"Calabresa e ovo"},
-{name:"X-Moda",price:19,type:"food",desc:"Calabresa e salsicha"},
+simples:[
+{name:"Misto Quente",price:8,desc:"Presunto e queijo"},
+{name:"Misto com Carne",price:12,desc:"Carne, presunto e queijo"},
+{name:"Bauru",price:10,desc:"Completo tradicional"},
+{name:"X-Egg",price:14,desc:"Ovo e vegetais"},
+{name:"Americano",price:14,desc:"Salsicha e queijo"},
+],
 
-/* PREMIUM */
-{name:"X-Frango",price:22,type:"food",desc:"Frango crocante"},
-{name:"X-Bacon",price:26,type:"food",desc:"Bacon e carne"},
-{name:"X-Tudo",price:29,type:"food",desc:"Tudo incluso"},
-{name:"X-Tudo Turbo",price:39,type:"food",desc:"Duplo tudo + banana"},
-{name:"American Burguer",price:22,type:"food",desc:"Carne e presunto"},
-{name:"X-Burguer",price:19,type:"food",desc:"Carne e queijo"},
-{name:"X-Filé",price:27,type:"food",desc:"Filé bovino"},
-{name:"Calabresa Burguer",price:23,type:"food",desc:"Calabresa e carne"},
+premium:[
+{name:"X-Frango",price:22,desc:"Frango crocante"},
+{name:"X-Bacon",price:26,desc:"Bacon e carne"},
+{name:"X-Tudo",price:29,desc:"Tudo incluso"},
+{name:"X-Tudo Turbo",price:39,desc:"Duplo + banana"},
+{name:"X-Burguer",price:19,desc:"Carne e queijo"},
+],
 
-/* HOT DOG */
-{name:"Cachorrinho",price:15,type:"food",desc:"Molho especial"},
-{name:"Cachorrão",price:20,type:"food",desc:"2 salsichas"},
+hotdog:[
+{name:"Cachorrinho",price:15,desc:"Molho especial"},
+{name:"Cachorrão",price:20,desc:"2 salsichas"},
+],
 
-/* BEBIDAS */
-{name:"Coca-Cola Lata",price:6,type:"drink",desc:"350ml"},
-{name:"Fanta Lata",price:6,type:"drink",desc:"350ml"},
-{name:"Guaraná Lata",price:6,type:"drink",desc:"350ml"},
-{name:"Refrigerante 2L",price:15,type:"drink",desc:"Vários sabores"},
-{name:"Refrigerante 1L",price:10,type:"drink",desc:"Coca/Guaraná"},
-];
+bebidas:[
+{name:"Coca Lata",price:6,desc:"350ml"},
+{name:"Fanta Lata",price:6,desc:"350ml"},
+{name:"Guaraná Lata",price:6,desc:"350ml"},
+{name:"Refrigerante 2L",price:15,desc:"Vários sabores"},
+]
+
+};
+
+let currentTab="simples";
 
 let cart=[];
 
-function renderMenu(){
-let el=document.getElementById("menu");
+/* ABAS */
+function showTab(tab){
+currentTab=tab;
+
+document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+event.target.classList.add("active");
+
+renderProducts();
+}
+
+function renderProducts(){
+let el=document.getElementById("produtos");
 el.innerHTML="";
 
-produtos.forEach((p,i)=>{
+data[currentTab].forEach((p,i)=>{
 el.innerHTML+=`
 <div class="item">
 <div>
 <b>${p.name}</b> - R$ ${p.price}
-<div style="font-size:12px;color:#aaa">${p.desc}</div>
+<div class="desc">${p.desc}</div>
 </div>
 
-<button onclick="add(${i})">+</button>
+<button onclick="add('${p.name}',${p.price})">Adicionar</button>
 </div>
 `;
 });
 }
 
-function add(i){
-let p=produtos[i];
+/* CARRINHO */
+function add(name,price){
 
-let item = cart.find(c=>c.name===p.name);
+let item = cart.find(c=>c.name===name);
 
 if(item){
 item.qty++;
 }else{
-
-let extra="";
-
-if(p.type==="drink"){
-extra=prompt("Escolha: Coca / Fanta / Guaraná / Pepsi")||"";
-}
-
-cart.push({name:p.name,price:p.price,qty:1,extra});
+cart.push({name,price,qty:1});
 }
 
 renderCart();
-toast();
 }
 
 function minus(i){
@@ -230,6 +256,7 @@ renderCart();
 }
 
 function renderCart(){
+
 let el=document.getElementById("cart");
 el.innerHTML="";
 
@@ -239,9 +266,9 @@ cart.forEach((c,i)=>{
 total+=c.price*c.qty;
 
 el.innerHTML+=`
-<div class="item">
+<div class="cart-item">
 <div>
-${c.name} ${c.extra?`(${c.extra})`:""}<br>
+${c.name}<br>
 R$ ${c.price} x ${c.qty}
 </div>
 
@@ -256,6 +283,7 @@ R$ ${c.price} x ${c.qty}
 document.getElementById("total").innerText="Total: R$ "+total.toFixed(2);
 }
 
+/* WHATS */
 function send(){
 
 let nome=document.getElementById("nome").value;
@@ -271,7 +299,7 @@ let total=0;
 
 cart.forEach(c=>{
 total+=c.price*c.qty;
-msg+=`- ${c.name} ${c.extra?`(${c.extra})`:""} - R$ ${(c.price*c.qty).toFixed(2)}\n`;
+msg+=`- ${c.name} - R$ ${(c.price*c.qty).toFixed(2)}\n`;
 });
 
 msg+=`\n💰 *Total: R$ ${total.toFixed(2)}*\n`;
@@ -282,13 +310,8 @@ let url="https://wa.me/5594992447611?text="+encodeURIComponent(msg);
 window.open(url,"_blank");
 }
 
-function toast(){
-let t=document.getElementById("toast");
-t.style.display="block";
-setTimeout(()=>t.style.display="none",1200);
-}
-
-renderMenu();
+/* INIT */
+renderProducts();
 
 </script>
 
