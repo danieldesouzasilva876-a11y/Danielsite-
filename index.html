@@ -114,7 +114,7 @@ input,textarea,select{
   margin-top:10px;
 }
 
-/* TOAST */
+/* toast */
 .toast{
   position:fixed;
   bottom:20px;
@@ -130,14 +130,13 @@ input,textarea,select{
 
 <body>
 
-<header>🍔 Ledilson Lanches 🍔</header>
-<div class="slogan">Prazer em lhe servir! Lucas 22:27</div>
+<header>🍔 Ledilson Lanches</header>
+<div class="slogan">Prazer em lhe servir! LC 22:27</div>
 
 <div class="aviso">⚠ APENAS RETIRADA NO LOCAL</div>
 
 <div class="container">
 
-<!-- ABAS -->
 <div class="tabs">
 <div class="tab active" onclick="tab('simples',event)">Simples</div>
 <div class="tab" onclick="tab('premium',event)">Premium</div>
@@ -179,38 +178,38 @@ input,textarea,select{
 
 let pedidoId = Math.floor(Math.random()*9000)+1000;
 
-/* 🍔 CARDÁPIO COMPLETO */
+/* 🍔 CARDÁPIO COMPLETO EXATO (SEM RESUMO) */
 let data = {
 
 simples:[
 {name:"X-Salada",price:19,desc:"Pão tostado, blend de carne, ovo, presunto, queijo, alface, tomate, milho e batata palha"},
-{name:"X-Moda",price:19,desc:"Calabresa, salsicha, presunto, queijo, alface, tomate, milho e batata palha"},
-{name:"X-Calabresa",price:17,desc:"Calabresa, ovo, presunto, queijo, alface, tomate, milho e batata palha"},
-{name:"X-Egg",price:14,desc:"Ovo, presunto, queijo, alface, tomate, milho e batata palha"},
-{name:"Americano",price:14,desc:"Presunto, queijo, salsicha, alface, tomate, milho e batata palha"},
-{name:"Misto com Carne",price:12,desc:"Blend de carne, presunto e queijo"},
-{name:"Bauru",price:10,desc:"Presunto, queijo, tomate, alface, milho e batata palha"},
-{name:"Misto Quente",price:8,desc:"Presunto e queijo"}
+{name:"X-Moda",price:19,desc:"Pão tostado, calabresa, salsicha, presunto, queijo, alface, tomate, milho e batata palha"},
+{name:"X-Calabresa",price:17,desc:"Pão tostado, calabresa, ovo, presunto, queijo, alface, tomate, milho e batata palha"},
+{name:"X-Egg",price:14,desc:"Pão tostado, ovo, presunto, queijo, alface, tomate, milho e batata palha"},
+{name:"Americano",price:14,desc:"Pão tostado, presunto, queijo, salsicha, alface, tomate, milho e batata palha"},
+{name:"Misto com Carne",price:12,desc:"Pão tostado, blend de carne, presunto e queijo"},
+{name:"Bauru",price:10,desc:"Pão tostado, presunto, queijo, tomate, alface, milho e batata palha"},
+{name:"Misto Quente",price:8,desc:"Pão tostado, presunto e queijo"}
 ],
 
 premium:[
-{name:"X-Tudo Turbo",price:39,desc:"2 carnes, bacon, 2 ovos, salsicha, calabresa, banana, 2 presuntos, 2 queijos, alface, tomate, milho e batata"},
-{name:"X-Tudo",price:29,desc:"Carne, bacon, ovo, salsicha, calabresa, presunto, queijo, alface, tomate, milho e batata"},
-{name:"X-Filé",price:27,desc:"Filé bovino, ovo, presunto, queijo, alface, tomate, milho e batata"},
-{name:"X-Bacon",price:26,desc:"Bacon, carne, presunto, queijo, alface, tomate, milho e batata"},
-{name:"Calabresa Burguer",price:23,desc:"Carne, calabresa, ovo, presunto, queijo, alface, tomate, milho e batata"},
-{name:"X-Frango",price:22,desc:"Frango crocante, ovo, presunto, queijo, alface, tomate, milho e batata"},
-{name:"American Burguer",price:22,desc:"Carne, presunto, salsicha, queijo, alface, tomate, milho e batata"},
-{name:"X-Burguer",price:19,desc:"Carne, presunto, queijo, alface, tomate, milho e batata"}
+{name:"X-Tudo Turbo",price:39,desc:"Pão tostado, 2 blends de carne, bacon, 2 ovos, salsicha, calabresa, banana, 2 presuntos, 2 queijos, alface, tomate, milho e batata"},
+{name:"X-Tudo",price:29,desc:"Pão tostado, blend de carne, bacon, ovo, salsicha, calabresa, presunto, queijo, alface, tomate, milho e batata"},
+{name:"X-Filé",price:27,desc:"Pão tostado, filé bovino, ovo, presunto, queijo, alface, tomate, milho e batata"},
+{name:"X-Bacon",price:26,desc:"Pão tostado, bacon, blend de carne, presunto, queijo, alface, tomate, milho e batata"},
+{name:"Calabresa Burguer",price:23,desc:"Pão tostado, blend de carne, calabresa, ovo, presunto, queijo, alface, tomate, milho e batata"},
+{name:"X-Frango",price:22,desc:"Pão tostado, frango crocante, ovo, presunto, queijo, alface, tomate, milho e batata"},
+{name:"American Burguer",price:22,desc:"Pão tostado, blend de carne, presunto, salsicha, queijo, alface, tomate, milho e batata"},
+{name:"X-Burguer",price:19,desc:"Pão tostado, blend de carne, presunto, queijo, alface, tomate, milho e batata"}
 ],
 
 hotdog:[
-{name:"Cachorrão",price:20,desc:"2 salsichas, molho especial, uva passa, maionese verde, ketchup, parmesão, milho e batata palha"},
-{name:"Cachorrinho",price:15,desc:"Salsicha, molho especial, uva passa, maionese verde, ketchup, parmesão, milho e batata palha"}
+{name:"Cachorrão",price:20,desc:"Pão, molho especial, 2 salsichas, uva passa, maionese verde, ketchup, queijo parmesão ralado, milho e batata palha"},
+{name:"Cachorrinho",price:15,desc:"Pão, molho especial, salsicha, uva passa, maionese verde, ketchup, queijo parmesão ralado, milho e batata palha"}
 ],
 
 bebidas:[
-{name:"Refrigerante 2L",price:15,desc:"Coca-Cola, Fanta, Guaraná, Pepsi"},
+{name:"Refrigerante 2L",price:15,desc:"Coca-Cola, Fanta, Guaraná Antarctica, Pepsi"},
 {name:"Refrigerante 1L",price:10,desc:"Coca-Cola ou Guaraná"},
 {name:"Coca-Cola Lata",price:6,desc:"350ml"},
 {name:"Fanta Lata",price:6,desc:"350ml"},
@@ -231,7 +230,7 @@ e.target.classList.add("active");
 render();
 }
 
-/* ✔ CORREÇÃO DEFINITIVA DA ORDEM */
+/* ORDEM CORRETA MAIOR → MENOR */
 function sort(arr){
 return [...arr].sort((a,b)=>b.price-a.price);
 }
@@ -345,7 +344,7 @@ t.style.display="block";
 setTimeout(()=>t.style.display="none",1200);
 }
 
-/* WHATS */
+/* WHATSAPP */
 function send(){
 
 let nome=document.getElementById("nome").value;
